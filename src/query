@@ -1,0 +1,33 @@
+mutation{
+  insert_todos_one(object: {
+    task: "oop"
+  }), {
+    id
+    task
+    completed
+  }
+}
+
+query query GetTodos {
+      todos {
+        id
+        task
+        completed
+      }
+    }`,
+
+query MyQuery {
+  todos {
+    id
+    task
+    createdAt
+  }
+}
+
+query {
+  todos {
+    id
+    task
+    createdAt
+  }
+}

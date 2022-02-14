@@ -6,37 +6,33 @@ export default function App() {
   const [title, setTitle] = useState("");
 
   const url = process.env.REACT_APP_URL;
-
-  //get
-  const getTodo = () => {
-    const allTodo = {
-      "query": `query {
-        todos {
-          id
-          task
-          completed
-        }
-      }`,
-    };
-    
-    fetch(url, {
-      method: 'POST',
-      headers: {
-         "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-          "x-hasura-admin-secret": process.env.REACT_APP_KEY
-      },
-      body: JSON.stringify(allTodo)
-  })
-  .then(res => res.json())
-  .then(res => {
-        setTodos(res.data.todos);
-        console.log('Success:', res);
-      })
+  const GET_QUERY = {
+    "query": `query {
+      todos {
+        id
+        task
+        completed
+      }
+    }`,
+  };
+  const options = {
+    "method": "POST",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "content-type": "application/json",
+      "x-hasura-admin-secret": ""
+    },
+    body: JSON.stringify(GET_QUERY)
+  }
+  const getDataTodos = async () => {
+    const response = await fetch(url, options)
+    const dataku = await response.json()
+    const todos = dataku.data.todos
+    setTodos(todos)
   }
 
   useEffect(() => {
-    getTodo()
+    getDataTodos()
   }, [])
 
   //add
@@ -53,12 +49,12 @@ export default function App() {
       }`
     }
 
-    fetch(url, {
+    fetch('', {
         method: 'POST',
         headers: {
            "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
-            "x-hasura-admin-secret": process.env.REACT_APP_KEY
+            "x-hasura-admin-secret": ""
         },
         body: JSON.stringify(newTodo)
     })
@@ -68,7 +64,7 @@ export default function App() {
     })
   }
 
-  //del
+  //delet
   const deletTodo = (e) => {
     const delTodo = {
       "query": `mutation{
@@ -79,12 +75,12 @@ export default function App() {
         }
       }`
     }
-    fetch(url, {
+    fetch('', {
       method: 'POST',
       headers: {
          "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
-          "x-hasura-admin-secret": process.env.REACT_APP_KEY
+          "x-hasura-admin-secret": ""
       },
       body: JSON.stringify(delTodo)
   })
